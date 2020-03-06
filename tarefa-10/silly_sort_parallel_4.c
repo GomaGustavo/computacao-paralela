@@ -30,9 +30,11 @@ int main()
    }
 
    // Move elements to final position
+   #pragma omp reduce(+:pos_final)
    for(i=0; i < n; i++) 
    {
-     int pos_final = 0;
+     int pos_final = 0; 
+
      for(j=0; j < nthreads; j++) 
         pos_final += pos[j][i];
     
