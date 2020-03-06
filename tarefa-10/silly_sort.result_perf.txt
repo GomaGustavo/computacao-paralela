@@ -1,0 +1,22 @@
+test passed
+
+ Performance counter stats for './silly_sort':
+
+            257,85 msec task-clock:u              #    0,997 CPUs utilized          
+                 0      context-switches:u        #    0,000 K/sec                  
+                 0      cpu-migrations:u          #    0,000 K/sec                  
+               100      page-faults:u             #    0,388 K/sec                  
+       741.186.695      cycles:u                  #    2,874 GHz                      (48,82%)
+     2.210.796.913      instructions:u            #    2,98  insn per cycle           (61,61%)
+       199.534.174      branches:u                #  773,836 M/sec                    (61,62%)
+            52.319      branch-misses:u           #    0,03% of all branches          (62,26%)
+     1.036.985.736      L1-dcache-loads:u         # 4021,652 M/sec                    (63,42%)
+         9.308.176      L1-dcache-load-misses:u   #    0,90% of all L1-dcache hits    (63,98%)
+               985      LLC-loads:u               #    0,004 M/sec                    (50,53%)
+               518      LLC-load-misses:u         #   52,59% of all LL-cache hits     (49,37%)
+
+       0,258526266 seconds time elapsed
+
+       0,257613000 seconds user
+       0,000000000 seconds sys
+

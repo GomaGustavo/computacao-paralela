@@ -1,0 +1,22 @@
+test passed
+
+ Performance counter stats for './silly_sort_parallel':
+
+          2.409,15 msec task-clock:u              #    1,696 CPUs utilized          
+                 0      context-switches:u        #    0,000 K/sec                  
+                 0      cpu-migrations:u          #    0,000 K/sec                  
+               105      page-faults:u             #    0,044 K/sec                  
+     7.417.991.096      cycles:u                  #    3,079 GHz                      (49,94%)
+     3.252.552.105      instructions:u            #    0,44  insn per cycle           (62,59%)
+       780.959.390      branches:u                #  324,163 M/sec                    (62,66%)
+         6.759.531      branch-misses:u           #    0,87% of all branches          (62,66%)
+     1.374.740.106      L1-dcache-loads:u         #  570,632 M/sec                    (62,66%)
+        38.999.274      L1-dcache-load-misses:u   #    2,84% of all L1-dcache hits    (62,51%)
+         8.430.199      LLC-loads:u               #    3,499 M/sec                    (49,79%)
+             1.516      LLC-load-misses:u         #    0,02% of all LL-cache hits     (49,79%)
+
+       1,420273365 seconds time elapsed
+
+       2,402764000 seconds user
+       0,000000000 seconds sys
+

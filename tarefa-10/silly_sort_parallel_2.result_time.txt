@@ -1,0 +1,4 @@
+test passed
+real    0m0,179s
+user    0m0,346s
+sys     0m0,000s
