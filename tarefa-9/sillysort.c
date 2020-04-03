@@ -19,7 +19,7 @@ int main()
    //      printf("%d ",in[i]);
  
    // Silly sort (you have to make this code parallel)
-      #pragma omp parallel for reduction(+:pos[i]) // collapse(2)
+      #pragma omp parallel for reduction(+:pos[i]) schedule(static, 100) num_threads(2)
       for(i=0; i < n; i++) 
          for(j=0; j < n; j++)
                if(in[i] > in[j])

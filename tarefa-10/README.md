@@ -4,6 +4,8 @@
 > Gustavo Henrique Gomes de Araújo
 >
 > Matrícula 496952
+>
+> Códigos de teste disponíveis no [GitHub](https://github.com/GustavoAraujoFaculdade/computacao-paralela/tree/master/tarefa-10)
 
 ### Comparação de versões de otimização
 
