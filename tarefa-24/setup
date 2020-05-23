@@ -1,0 +1,5 @@
+alias compile="rm sum_cuda; nvcc -O3 sum_cuda.cu -o sum_cuda"
+alias benchmark="compile; time ./sum_cuda; nvprof --events warps_launched --metrics warp_execution_efficiency ./sum_cuda"
+alias run="./sum_cuda"
+alias compare="diff output.txt original/output.txt"
+alias test="run > output.txt; compare"

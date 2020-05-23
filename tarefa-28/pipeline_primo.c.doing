@@ -1,0 +1,136 @@
+/* 
+    Tarefa 28 - Padrão Pipeline em MPI
+    Alunos:
+		Carolina de Lima Silva
+		Gustavo Henrique Gomes de Araújo
+		Vitor Fernandes do Amaral
+*/
+
+#include <mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_N 100000
+#define PIPE_MSG 0  
+#define END_MSG 1  
+
+int size;  
+int n;     
+int rank;  
+
+void reduce() {
+	int i, subTotal = 0;
+	int primeCount = 3;
+	MPI_Status Status;
+
+	for (int i = 2; i < size; i++) {
+		MPI_Recv(&subTotal, 1, MPI_INT, i, MPI_ANY_TAG, MPI_COMM_WORLD, &Status);
+		// printf("reduce() | received from %d\n", i);
+
+		primeCount += subTotal;
+	}
+
+   printf("number of primes = %d\n", primeCount);
+}
+
+void removeMultipleOf3() {  
+	int number, i;
+	int nextProcessRank = 1;
+
+	for (i = 1; i <= n / 2; i++)  {
+    	number = 2 * i + 1;
+
+    	if (number > n) {
+			// printf("removeMultipleOf3() | END\n");
+    		break;
+    	}
+
+    	if (number % 3 > 0) {
+    		MPI_Send(&number, 1, MPI_INT, nextProcessRank, PIPE_MSG, MPI_COMM_WORLD);
+    	}
+	}
+
+	MPI_Send(&number, 1, MPI_INT, nextProcessRank, END_MSG, MPI_COMM_WORLD);
+}
+
+void removeMultipleOf5() {  	
+	int number;
+	int previousProcessRank = 0;
+	int i = 0;
+	MPI_Status Status; 
+	
+	while (1)  {
+		MPI_Recv(&number, 1, MPI_INT, previousProcessRank, MPI_ANY_TAG, MPI_COMM_WORLD, &Status);
+
+		if (Status.MPI_TAG == END_MSG){
+			// printf("removeMultipleOf5() | END\n");
+			break;
+		}
+
+		if (number % 5 > 0) {
+			int nextProcessRank = (i % (size - 2)) + 2;
+			i++;
+
+			// printf("removeMultipleOf5() | number = %d | nextProcessRank = %d\n", number, nextProcessRank);
+    		MPI_Send(&number, 1, MPI_INT, nextProcessRank, PIPE_MSG, MPI_COMM_WORLD);
+    	}
+	}
+	
+	for (i = 2; i < size; i++) {
+		MPI_Send(&number, 1, MPI_INT, i, END_MSG, MPI_COMM_WORLD);
+	}
+}
+
+void countOnlyPrimes() {
+	int number, i, isComposite, subTotal = 0;
+	int previousProcessRank = 1;
+	MPI_Status Status; 
+
+	while (1)  {
+    	MPI_Recv(&number, 1, MPI_INT, previousProcessRank, MPI_ANY_TAG, MPI_COMM_WORLD, &Status);
+
+    	if (Status.MPI_TAG == END_MSG) {
+			// printf("countOnlyPrimes() | END\n");
+			break;
+		}
+
+    	isComposite = 0;
+    	for (i = 7; i * i <= number; i += 2) {
+    		if (number % i == 0)  {
+	    		isComposite = 1;
+	    		break;
+			}
+		}
+      
+		if (!isComposite) {
+			subTotal++;
+		}
+	}
+
+	MPI_Send(&subTotal, 1, MPI_INT, 0, PIPE_MSG, MPI_COMM_WORLD);
+}
+
+void main(int argc, char **argv) {  
+	n = atoi(argv[1]); 
+	MPI_Init(&argc, &argv);	
+
+	MPI_Comm_size(MPI_COMM_WORLD, &size);
+	MPI_Comm_rank(MPI_COMM_WORLD, &rank); 
+
+	switch (rank)  {
+    	case 0:
+	  		removeMultipleOf3();
+			reduce();
+			break;
+      
+		case 1:
+	  		removeMultipleOf5();
+    		break;
+      
+		default:
+			countOnlyPrimes();
+			break;
+	};
+
+	MPI_Finalize();
+}
